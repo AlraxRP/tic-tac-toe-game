@@ -134,9 +134,19 @@ function Gamecontroller(player1="A",player2="B")
 
         if(success)
         {
-            if(checkWinner(row,column,currentPlayer.token)) return true;
+            if(checkWinner(row,column,currentPlayer.token))
+            {
+                console.log(`Player ${currentPlayer.name} wins!`);
+                board.printBoard();
+                return true;
+            }
             
-            if(checkDraw()) return true;
+            if(checkDraw())
+            {
+                console.log("It's a draw");
+                board.printBoard();
+                return true;
+            }
 
             printNewRound();
             switchPlayer();
@@ -155,8 +165,10 @@ function gameStart()
 
     while(!gameOver)
     {
-        let rowSelected = prompt("Enter row");
-        let columnSelected = prompt("Enter column");
+        let currentPlayer = game.getCurrentPlayer().name;
+
+        let rowSelected = prompt(`Player ${currentPlayer} enter row`);
+        let columnSelected = prompt(`Player ${currentPlayer} enter column`);
 
         gameOver = game.playRound(rowSelected,columnSelected);
     }
