@@ -138,14 +138,14 @@ function Gamecontroller(player1="A",player2="B")
             {
                 console.log(`Player ${currentPlayer.name} wins!`);
                 board.printBoard();
-                return true;
+                return "winner";
             }
             
             if(checkDraw())
             {
                 console.log("It's a draw");
                 board.printBoard();
-                return true;
+                return "draw";
             }
 
             printNewRound();
@@ -161,9 +161,12 @@ function Gamecontroller(player1="A",player2="B")
 
 function ScreenController()
 {
-    const game = Gamecontroller();
+    let game = Gamecontroller();
     const playerTurnText = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
+
+    const startGameBtn = document.querySelector(".play");
+    const resetGameBtn = document.querySelector(".reset");
 
     const updateScreen = () =>
     {
@@ -195,13 +198,40 @@ function ScreenController()
 
         if(!selectedRow) return;
 
-        game.playRound(selectedRow,selectedColumn);
+        let gameStatus= game.playRound(selectedRow,selectedColumn);
+        if(gameStatus == "winner")
+        {
+            playerTurnText.textContent = `Player ${currentPlayer.name} wins!`;
+            return
+        }
+        if(gameStatus == "draw")
+        {
+            playerTurnText.textContent = "It's a draw"
+            return
+        }
         updateScreen();
     }
 
-    boardDiv.addEventListener("click", clickHandlerBoard);
+    function resetGame()
+    {
+        game = Gamecontroller();
+        updateScreen();
+    }
 
-    updateScreen();
+    function playGame()
+    {
+        const resetGameBtn = document.querySelector(".reset");
+        resetGameBtn.disabled = false;
+        resetGameBtn.addEventListener("click",resetGame);
+
+        startGameBtn.disabled= true;
+
+        boardDiv.addEventListener("click", clickHandlerBoard);
+
+        updateScreen();
+    }
+
+    startGameBtn.addEventListener("click",playGame);
 }
 
 ScreenController();
