@@ -12,6 +12,16 @@
     row-gap: 10px;
 }
 
+h1
+{
+    padding-top: 10px;
+}
+
+h2
+{
+    padding-top: 30px;
+}
+
 .board
 {
     display: grid;
@@ -20,7 +30,7 @@
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
     border: 1px solid black;
-    background-color: rgb(219, 230, 185);
+    background-color: #dbe6b9;
 }
 
 .cell
@@ -29,6 +39,15 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 2em;
+    font-size: 3em;
     cursor: pointer;
+}
+
+.play, .reset
+{
+    background-color:#dbe6b9;
+    font-weight: bold;
+    border-radius: 10px;
+    font-size: 1.1em;
+    height: 50px;
 }
