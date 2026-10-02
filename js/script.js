@@ -44,7 +44,7 @@ function Gameboard()
 
 function Cell()
 {
-    let value = 0;
+    let value = "";
 
     const setToken = (player) =>
     {
@@ -66,8 +66,8 @@ function Gamecontroller(player1="A",player2="B")
     let gameStatus = "ongoing";
 
     const players = [
-        {name: player1,token: 1},
-        {name: player2,token: 2}
+        {name: player1,token: "X"},
+        {name: player2,token: "O"}
     ];
 
     let currentPlayer = players[0];
