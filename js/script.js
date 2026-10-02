@@ -63,6 +63,8 @@ function Gamecontroller(player1="A",player2="B")
 {
     const board = Gameboard();
 
+    let gameStatus = "ongoing";
+
     const players = [
         {name: player1,token: 1},
         {name: player2,token: 2}
@@ -78,6 +80,11 @@ function Gamecontroller(player1="A",player2="B")
     const switchPlayer = () =>
     {
         currentPlayer = currentPlayer == players[0] ? players[1] : players[0];
+    }
+
+    const getGameStatus = () =>
+    {
+        return gameStatus;
     }
 
     const printNewRound = () =>
@@ -138,14 +145,16 @@ function Gamecontroller(player1="A",player2="B")
             {
                 console.log(`Player ${currentPlayer.name} wins!`);
                 board.printBoard();
-                return "winner";
+                gameStatus = "winner";
+                return
             }
             
             if(checkDraw())
             {
                 console.log("It's a draw");
                 board.printBoard();
-                return "draw";
+                gameStatus = "draw";
+                return
             }
 
             printNewRound();
@@ -156,7 +165,7 @@ function Gamecontroller(player1="A",player2="B")
 
     printNewRound();
 
-    return({getCurrentPlayer,playRound, getBoard: board.getBoard});
+    return({getCurrentPlayer,playRound, getBoard: board.getBoard, getGameStatus});
 }
 
 function ScreenController()
@@ -166,7 +175,6 @@ function ScreenController()
     const boardDiv = document.querySelector(".board");
 
     const startGameBtn = document.querySelector(".play");
-    const resetGameBtn = document.querySelector(".reset");
 
     const updateScreen = () =>
     {
@@ -198,18 +206,23 @@ function ScreenController()
 
         if(!selectedRow) return;
 
-        let gameStatus= game.playRound(selectedRow,selectedColumn);
-        if(gameStatus == "winner")
-        {
-            playerTurnText.textContent = `Player ${currentPlayer.name} wins!`;
-            return
-        }
-        if(gameStatus == "draw")
-        {
-            playerTurnText.textContent = "It's a draw"
-            return
-        }
+        game.playRound(selectedRow,selectedColumn);
         updateScreen();
+
+        if(game.getGameStatus() == "winner"){
+            const currentPlayer = game.getCurrentPlayer();
+            playerTurnText.textContent = `Player ${currentPlayer.name} wins!`;
+            boardDiv.querySelectorAll("button").forEach((button) => {
+                button.disabled = true;
+            });
+        }
+        if(game.getGameStatus() == "draw"){
+            playerTurnText.textContent = "It's a draw";
+            boardDiv.querySelectorAll("button").forEach((button) => {
+                button.disabled = true;
+            });
+        };
+
     }
 
     function resetGame()
@@ -225,7 +238,7 @@ function ScreenController()
         resetGameBtn.addEventListener("click",resetGame);
 
         startGameBtn.disabled= true;
-
+        
         boardDiv.addEventListener("click", clickHandlerBoard);
 
         updateScreen();
